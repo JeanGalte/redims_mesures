@@ -30,9 +30,11 @@ int hat_init(HAT_U8 *h, size_t initial_B) {
 
 void hat_free(HAT_U8 *h) {
     if (!h) return;
-    for (size_t i = 0; i < h->B; ++i)
-        tracked_free(h->dir[i], h->B * sizeof(uint8_t)); 
-    tracked_free(h->dir, h->n);
+    for (size_t i = 0; i < h->B; ++i) {
+      printf("lala\n"); 
+      tracked_free(h->dir[i], h->B);
+    }
+    tracked_free(h->dir, h->n * sizeof(size_t));    
 }
 
 static int hat_rebuild(HAT_U8 *h, size_t newB) {
