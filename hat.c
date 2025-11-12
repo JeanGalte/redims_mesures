@@ -19,19 +19,18 @@ static size_t next_pow2(size_t x) {
 }
 
 int hat_init(HAT_U8 *h, size_t initial_B) {
-    if (!h) return -1;  
-    size_t B = next_pow2(initial_B);
-    h->n = 0;
-    h->B = B;
-    h->dir = tracked_calloc(B, sizeof(uint8_t *)); 
-    if (!h->dir) return -1;
-    return 0; //
+  if (!h) return -1;   
+  size_t B = next_pow2(initial_B);
+  h->n = 0;
+  h->B = B;
+  h->dir = tracked_calloc(B, sizeof(uint8_t *)); 
+  if (!h->dir) return -1;
+  return 0; //
 }
 
 void hat_free(HAT_U8 *h) {
     if (!h) return;
     for (size_t i = 0; i < h->B; ++i) {
-      printf("lala\n"); 
       tracked_free(h->dir[i], h->B);
     }
     tracked_free(h->dir, h->n * sizeof(size_t));    
@@ -43,6 +42,7 @@ static int hat_rebuild(HAT_U8 *h, size_t newB) {
     if (!new_dir) return -1;
 
     size_t oldB = h->B;
+    size_t oldn = h->n; 
     uint8_t **old_dir = h->dir;
     size_t n = h->n;
 
@@ -62,8 +62,8 @@ static int hat_rebuild(HAT_U8 *h, size_t newB) {
 
     // libère les anciens blocs
     for (size_t i = 0; i < oldB; ++i)
-        free(old_dir[i]);
-    free(old_dir);
+      tracked_free(old_dir[i], oldB);
+    tracked_free(old_dir, oldn * sizeof(size_t));
 
     h->dir = new_dir;
     h->B = newB;
