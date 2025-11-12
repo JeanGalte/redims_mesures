@@ -31,7 +31,7 @@ void tracked_free(void* ptr, size_t size) {
 
 void* tracked_calloc(int count, size_t size) {
   int total = count * size;
-  void *ptr = malloc(total); 
+  void *ptr = tracked_malloc(total); 
   if (!ptr) return NULL;
   memset(ptr, 0, total);
   return ptr; 

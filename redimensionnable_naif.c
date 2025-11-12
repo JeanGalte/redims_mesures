@@ -13,7 +13,7 @@ int da_init(DynArrayU8 *da, size_t initial_capacity) {
     if (!da) return -1;
     da->size = 0;
     da->capacity = (initial_capacity > 0) ? initial_capacity : 1;
-    da->data = tracked_malloc(da->capacity * sizeof(uint8_t));
+    da->data = tracked_malloc(da->capacity);
     if (!da->data) return -1;
     return 0;
 }
@@ -28,8 +28,7 @@ void da_free(DynArrayU8 *da) {
 
 static int da_grow(DynArrayU8 *da) {
     size_t new_capacity = da->capacity * 2;
-    
-    uint8_t *new_data = tracked_realloc(da->data, da->capacity, new_capacity * sizeof(uint8_t));
+    uint8_t *new_data = tracked_realloc(da->data, da->capacity, new_capacity);
     if (!new_data) return -1;
     da->data = new_data;
     da->capacity = new_capacity;
