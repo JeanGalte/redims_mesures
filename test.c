@@ -55,6 +55,7 @@ int main(int argc, char *argv[]) {
         double naive_u = ((double)(naive_e - naive_s)) / CLOCKS_PER_SEC;
         fprintf(fout, "%ld,naif,%f,%zu\n", n, naive_u, total_alloc_naif);
         da_free(&arr);
+	force_reset(); 
 
         /* Test implémentation HAT */
         HAT_U8 hat;

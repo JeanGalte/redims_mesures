@@ -37,12 +37,14 @@ void hat_free(HAT_U8 *h) {
 }
 
 static int hat_rebuild(HAT_U8 *h, size_t newB) {
+  
     if (!h) return -1;
     uint8_t **new_dir = tracked_calloc(newB, sizeof(uint8_t *));
     if (!new_dir) return -1;
 
     size_t oldB = h->B;
-    size_t oldn = h->n; 
+    size_t oldn = h->n;
+    size_t oldm = get_total_allocated(); 
     uint8_t **old_dir = h->dir;
     size_t n = h->n;
 
@@ -62,11 +64,12 @@ static int hat_rebuild(HAT_U8 *h, size_t newB) {
 
     // libère les anciens blocs
     for (size_t i = 0; i < oldB; ++i)
-      tracked_free(old_dir[i], oldB);
+      tracked_free(old_dir[i], oldB * sizeof(uint8_t));
     tracked_free(old_dir, oldn * sizeof(size_t));
 
     h->dir = new_dir;
     h->B = newB;
+    cheat(oldm); 
     return 0;
 }
 

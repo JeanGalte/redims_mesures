@@ -25,7 +25,7 @@ with open("resultats.csv", newline='') as csvfile:
         elif impl == 'HAT':
             temps_hat.append(temps)
             alloc_hat.append(alloc)
-
+        
 # Courbe du temps
 plt.figure(figsize=(10,5))
 plt.plot(n_values, temps_naif, label='Naïf', marker='o')
